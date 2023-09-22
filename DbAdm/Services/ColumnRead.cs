@@ -1,0 +1,41 @@
+using Base.Enums;
+using Base.Models;
+using Base.Services;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+
+namespace DbAdm.Services
+{
+    public class ColumnRead
+    {
+        private readonly ReadDto dto = new()
+        {
+            //1.set ReadSql
+            ReadSql = @"
+Select 
+    p.Code as ProjectCode, t.Code as TableCode,
+    c.Code, c.Name, 
+    c.DataType, '' as _Fun ,
+    c.Status, c.Id
+From [Column] c
+inner join [Table] t on t.Id=c.TableId
+inner join Project p on p.Id=t.ProjectId
+Order by p.Id, t.Id, c.Sort
+",
+            TableAs = "c",
+            //2.set query fields
+            Items = new QitemDto[] {
+                new() { Fid = "ProjectId", Col = "t.ProjectId" },
+                new() { Fid = "TableCode", Col = "t.Code", Op = ItemOpEstr.Like },
+                new() { Fid = "Code", Op = ItemOpEstr.Like },
+            },
+        };
+
+        public async Task<JObject> GetPageA(DtDto dt)
+        {
+            //3.call CrudRead.GetPage()
+            return await new CrudRead().GetPageA(dto, dt);
+        }        
+
+    } //class
+}

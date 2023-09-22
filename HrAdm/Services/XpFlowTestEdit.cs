@@ -1,0 +1,33 @@
+﻿using Base.Models;
+using Base.Services;
+
+namespace HrAdm.Services
+{
+    public class XpFlowTestEdit : XgEdit
+    {
+        private string _flowCode;   //XpFlow.Code
+        public XpFlowTestEdit(string ctrl, string flowCode) : base(ctrl) 
+        {
+            _flowCode = flowCode;
+        }
+
+        override public EditDto GetDto()
+        {
+            //var locale = _Xp.GetLocale0();
+            var sql = $@"
+select
+    d.*,
+	s.Id as SignId,
+    c.Name_zhHant as FlowStatusName,
+    u.Name as UserName
+from XpFlowSignTest s
+join XpFlowTest d on s.SourceId=d.Id and s.FlowLevel=d.FlowLevel
+join User u on d.UserId=u.Id
+join XpCode c on c.Type='FlowStatus' and d.FlowStatus=c.Value
+where d.Id='{{0}}'
+";
+            return new EditDto() { ReadSql = sql };
+        }
+
+    } //class
+}

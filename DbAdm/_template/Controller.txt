@@ -1,0 +1,169 @@
+{{#unless AuthType0}}
+using Base.Enums;
+{{/unless}}
+using Base.Models;
+using Base.Services;
+{{#unless AuthType0}}
+using BaseWeb.Attributes;
+{{/unless}}
+using BaseApi.Controllers;
+using BaseWeb.Services;
+using {{Project}}.Services;
+{{#if HasFile}}
+using Microsoft.AspNetCore.Http;
+{{/if}}
+using Microsoft.AspNetCore.Mvc;
+{{#if HasFile}}
+using System.Collections.Generic;
+{{/if}}
+using System.Threading.Tasks;
+
+namespace {{Project}}.Controllers
+{
+    {{#if AuthType1}}
+    [XgProgAuth]
+    {{/if}}
+    public class {{ProgCode}}Controller : ApiCtrl
+    {
+        {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Read)]
+        {{/if}}
+        {{#if HasSelectA}}
+        public async Task<ActionResult> Read()
+        {{else}}
+        public ActionResult Read()
+        {{/if}}
+        {
+	        {{#if ReadSelectCols}}
+			//for read view
+		        {{#each ReadSelectCols}}
+			{{this}}
+		        {{/each}}
+	        {{/if}}
+	        {{#if EditSelectCols}}
+			//for edit view
+		        {{#each EditSelectCols}}
+			{{this}}
+		        {{/each}}
+	        {{/if}}
+            return View();
+        }
+
+        [HttpPost]
+        {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Read)]
+        {{/if}}
+        public async Task<ContentResult> GetPage(DtDto dt)
+        {
+            return JsonToCnt(await new {{ProgCode}}Read().GetPageA(Ctrl, dt));
+        }
+
+        private {{ProgCode}}Edit EditService()
+        {
+            return new {{ProgCode}}Edit(Ctrl);
+        }
+
+        {{#if HasUpdate}}
+        [HttpPost]
+            {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Update)]
+            {{/if}}
+        public async Task<ContentResult> GetUpdJson(string key)
+        {
+            return JsonToCnt(await EditService().GetUpdJsonA(key));
+        }
+        {{/if}}
+
+        {{#if HasView}}
+        [HttpPost]
+            {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.View)]
+            {{/if}}
+        public async Task<ContentResult> GetViewJson(string key)
+        {
+            return JsonToCnt(await EditService().GetViewJsonA(key));
+        }
+        {{/if}}
+
+        {{#if HasFile}}
+            {{#if HasCreate}}
+        [HttpPost]
+                {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Create)]
+                {{/if}}
+        public async Task<JsonResult> Create(string json, {{FileEditTypeArg}})
+        {
+            return Json(await EditService().CreateA(_Str.ToJson(json), {{FileEditArg}}));
+        }
+            {{/if}}
+
+            {{#if HasUpdate}}
+        [HttpPost]
+                {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Update)]
+                {{/if}}
+        public async Task<JsonResult> Update(string key, string json, {{FileEditTypeArg}})
+        {
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json), {{FileEditArg}}));
+        }
+            {{/if}}
+
+            {{#if HasView}}
+        //TODO: add your code
+        //get file/image
+                {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.View)]
+                {{/if}}
+        public async Task<FileResult> ViewFile(string table, string fid, string key, string ext)
+        {
+            return await _Xp.View{{ProgCode}}A(fid, key, ext);
+        }
+            {{/if}}
+        {{else}}
+            {{#if HasCreate}}
+        [HttpPost]
+                {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Create)]
+                {{/if}}
+        public async Task<JsonResult> Create(string json)
+        {
+            return Json(await EditService().CreateA(_Str.ToJson(json)));
+        }
+            {{/if}}
+
+            {{#if HasUpdate}}
+        [HttpPost]
+                {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Update)]
+                {{/if}}
+        public async Task<JsonResult> Update(string key, string json)
+        {
+            return Json(await EditService().UpdateA(key, _Str.ToJson(json)));
+        }
+            {{/if}}
+        {{/if}}
+
+        {{#if HasDelete}}
+        [HttpPost]
+            {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Delete)]
+            {{/if}}
+        public async Task<JsonResult> Delete(string key)
+        {
+            return Json(await EditService().DeleteA(key));
+        }
+        {{/if}}
+
+        {{#if HasExport}}
+        [HttpPost]
+            {{#if AuthType2}}
+        [XgProgAuth(CrudEnum.Export)]
+            {{/if}}
+        public async Task Export(string find)
+        {
+            await new {{ProgCode}}Read().ExportA(Ctrl, _Str.ToJson(find));
+        }
+        {{/if}}
+
+    }//class
+}

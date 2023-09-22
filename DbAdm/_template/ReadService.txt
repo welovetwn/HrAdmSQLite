@@ -1,0 +1,45 @@
+using Base.Enums;
+using Base.Models;
+using Base.Services;
+{{#if HasExport}}
+using BaseWeb.Services;
+{{/if}}
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+
+namespace {{Project}}.Services
+{
+    public class {{ProgCode}}Read
+    {
+        private readonly ReadDto dto = new()
+        {
+            ReadSql = @"
+{{ReadSql}}
+",
+		{{#if TableAs}}
+			TableAs = "{{TableAs}}",
+		{{/if}}
+		{{#if RsItemStrs}}
+            Items = new QitemDto[] {
+			{{#each RsItemStrs}}
+                {{this}}
+			{{/each}}
+            },
+		{{/if}}
+        };
+
+        public async Task<JObject> GetPageA(string ctrl, DtDto dt)
+        {
+            return await new CrudRead().GetPageA(dto, dt, ctrl);
+        }
+
+	{{#if HasExport}}
+        public async Task ExportA(string ctrl, JObject find)
+        {
+            await _WebExcel.ExportByReadA(ctrl, dto, find, 
+                "{{ProgCode}}.xlsx", _Xp.GetTplPath("{{ProgCode}}.xlsx", true), 1);
+        }
+
+	{{/if}}
+    } //class
+}

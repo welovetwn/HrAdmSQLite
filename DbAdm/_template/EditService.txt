@@ -1,0 +1,120 @@
+using Base.Enums;
+using Base.Models;
+using Base.Services;
+{{#if HasFile}}
+using BaseApi.Services;
+using Microsoft.AspNetCore.Http;
+{{/if}}
+using Newtonsoft.Json.Linq;
+{{#if HasFile}}
+using System.Collections.Generic;
+using System.Threading.Tasks;
+{{/if}}
+
+namespace {{Project}}.Services
+{
+    public class {{ProgCode}}Edit : XgEdit
+    {
+        public {{ProgCode}}Edit(string ctrl) : base(ctrl) { }
+
+        override public EditDto GetDto()
+        {
+            return new EditDto
+            {
+				{{#MainTable}}
+				Table = "dbo.[{{TableCode}}]",
+                PkeyFid = "{{PkeyFid}}",
+			{{#if AutoIdLen}}
+				AutoIdLen = {{AutoIdLen}},
+			{{/if}}
+			{{#unless HasCol4}}
+                Col4 = null,
+			{{/unless}}
+                Items = new EitemDto[] 
+				{
+				{{#Eitems}}
+					{{ServiceStr}}
+				{{/Eitems}}
+                },
+				{{/MainTable}}
+			{{#if ChildTables}}
+                Childs = new EditDto[]
+                {
+				{{#ChildTables}}
+                    new EditDto
+                    {
+                        Table = "dbo.[{{TableCode}}]",
+                        PkeyFid = "{{PkeyFid}}",
+                        FkeyFid = "{{FkeyFid}}",
+			        {{#if AutoIdLen}}
+				        AutoIdLen = {{AutoIdLen}},
+			        {{/if}}
+					{{#if OrderBy}}
+						OrderBy = "{{OrderBy}}",
+					{{/if}}
+					{{#unless HasCol4}}
+                        Col4 = null,
+					{{/unless}}
+                        Items = new EitemDto[] 
+						{
+						{{#Eitems}}
+						{{#if ServiceStr}}
+							{{ServiceStr}}
+						{{/if}}
+						{{/Eitems}}
+                        },
+                    },
+				{{/ChildTables}}
+                },
+			{{/if}}
+            };
+        }
+
+        {{#if HasFile}}
+        //t03_FileName: t + table serial _ + fid
+        public async Task<ResultDto> CreateA(JObject json, {{FileEditTypeArg}})
+        {
+            var service = EditService();
+            var result = await service.CreateA(json);
+        {{#if FileType0}}
+            if (_Valid.ResultStatus(result))
+			{{#each FileEditStrs}}
+				{{this}}
+			{{/each}}
+        {{/if}}
+        {{#if FileType1}}
+            if (_Valid.ResultStatus(result))
+            {
+                var newKeyJson = service.GetNewKeyJson();
+			{{#each FileEditStrs}}
+				{{this}}
+			{{/each}}
+            }
+        {{/if}}
+            return result;
+        }
+
+        public async Task<ResultDto> UpdateA(string key, JObject json, {{FileEditTypeArg}})
+        {
+            var service = EditService();
+            var result = await service.UpdateA(key, json);
+        {{#if FileType0}}
+            if (_Valid.ResultStatus(result))
+			{{#each FileEditStrs}}
+				{{this}}
+			{{/each}}
+        {{/if}}
+        {{#if FileType1}}
+            if (_Valid.ResultStatus(result))
+            {
+                var newKeyJson = service.GetNewKeyJson();
+			{{#each FileEditStrs}}
+				{{this}}
+			{{/each}}
+            }
+        {{/if}}
+            return result;
+        }
+        {{/if}}
+    } //class
+}

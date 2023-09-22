@@ -1,0 +1,44 @@
+﻿using Base.Enums;
+using Base.Models;
+using Base.Services;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+
+namespace HrAdm.Services
+{
+    public class LeaveRead
+    {
+        private ReadDto GetReadDto()
+        {
+            var locale0 = _Xp.GetLocale0();
+            return new ReadDto()
+            {
+                ReadSql = $@"
+select 
+    u.Name as UserName, u2.Name as AgentName,
+    c.Name_{locale0} as LeaveName, l.StartTime,
+    l.EndTime, l.Hours,
+    c2.Name_{locale0} as SignStatusName, l.Created,
+    l.Id
+from Leave l
+join User u on l.UserId=u.Id
+join User u2 on l.AgentId=u2.Id
+join XpCode c on c.Type='LeaveType' and l.LeaveType=c.Value
+join XpCode c2 on c2.Type='FlowStatus' and l.FlowStatus=c2.Value
+order by l.Id
+",
+                Items = new QitemDto[] {
+                    new() { Fid = "StartTime", Type = QitemTypeEnum.Date },
+                    new() { Fid = "LeaveType" },
+                    new() { Fid = "FlowStatus" },
+                },
+            };
+        }
+
+        public async Task<JObject> GetPageA(string ctrl, DtDto dtDto)
+        {
+            return await new CrudRead().GetPageA(GetReadDto(), dtDto, ctrl);
+        }
+
+    } //class
+}

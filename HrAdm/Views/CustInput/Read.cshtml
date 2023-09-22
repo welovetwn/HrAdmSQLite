@@ -1,0 +1,64 @@
+﻿@inject IHtmlLocalizer<HrAdm.R0> R0
+@inject IViewLocalizer R
+
+<script src="~/js/view/CustInput.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //set js locale for test
+        _me.R = {
+            text: '@R["Text"]',
+            crud: '@R0["Crud"]',
+        };
+
+        _me.init();
+    });
+</script>
+
+@await Component.InvokeAsync("XgProgPath", new { names = new string[] { R0["MenuCustInput"].Value } })
+<div class="xg-prog">
+    <div id="divRead">
+        <form id='formRead' class='xg-form'>
+            <div class="row">
+                <vc:xi-text dto="@(new XiTextDto { Title = R["Text"].Value, Fid = "FldText", InRow = true })"/>
+                <vc:xg-find-tbar/>
+            </div>
+        </form>
+
+        <div class='xg-btns-box'>
+            <vc:xg-create/>
+        </div>
+        <table id="tableRead" class="table xg-table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>@R["Text"]</th>
+                    <th>@R["Int"]</th>
+                    <th>@R["Dec"]</th>
+                    <th>@R["Date"]</th>
+                    <th>@R["Dt"]</th>
+                    <th>@R0["Crud"]</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="divEdit" class="xg-hide">
+        <form id='eform' class='xg-form'>
+            <vc:xi-check dto="@(new(){ Title = "XiCheck", Fid = "FldCheck", Edit = "U", LabelTip = "CheckBox Input" })"/>
+            <vc:xi-date dto="@(new(){ Title = "XiDate", Fid = "FldDate", Required = true, LabelTip = "Date Input" })"/>
+            <vc:xi-dt dto="@(new(){ Title = "XiDt", Fid = "FldDt", Required = true, Cols = "2,8" })"/>
+            <vc:xi-dec dto="@(new(){ Title = "XiDec", Fid = "FldDec", Required = true, Cols = "2,6", Width = "100px" })"/>
+            <vc:xi-int dto="@(new(){ Title = "XiInt", Fid = "FldInt", Required = true, Cols = "2,6", Width = "100px", Min = 2, Max = 10 })"/>
+            <vc:xi-file dto="@(new(){ Title = "XiFile", Fid = "FldFile", Required = true, MaxSize = 1, FileType = "*" })"/>
+            @*<vc:xi-link dto="@(new(){ Title = "XiLink", Fid = "FldFile" })"></vc:xi-link>*@
+            <vc:xi-hide dto="@(new(){ Fid = "Id" })"/>
+            <vc:xi-html dto="@(new(){ Title = "XiHtml", Fid = "FldHtml", Required = true, Cols = "2,9" })"/>
+            <vc:xi-radio dto="@(new(){ Title = "XiRadio", Fid = "FldRadio", Rows = ViewBag.Radios })"/>
+            <vc:xi-read dto="@(new(){ Title = "XiRead", Fid = "FldRead", Value = "label" })"/>
+            <vc:xi-select dto="@(new(){ Title = "XiSelect", Fid = "FldSelect", Rows = ViewBag.Selects, Required = true })"/>
+            <vc:xi-textarea dto="@(new(){ Title = "XiTextarea", Fid = "FldTextarea", MaxLen = 255, Required = true, Cols = "2,9" })"/>
+            <vc:xi-text dto="@(new(){ Title = "XiText", Fid = "FldText", MaxLen = 20, Required = true })"/>
+        </form>
+        <vc:xg-save-back/>
+    </div>
+</div>
