@@ -1,4 +1,4 @@
-# SQLiteHrAdm
+# HrAdmSQLite
 All Code Forked from https://github.com/bruce68tw/
 
 ## DbAdm 資料庫文件系統 (ASP.NET Core)
