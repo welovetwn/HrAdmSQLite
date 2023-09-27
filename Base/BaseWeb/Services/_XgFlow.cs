@@ -398,7 +398,7 @@ insert into {signTable}(
 update {signTable} set 
     SignStatus=@SignStatus, 
     Note=@Note,
-    SignTime=getDate()
+    SignTime=date('now')
 where Id='{flowSignId}' 
 ";
             var count = await db.ExecSqlA(sql, new List<object>() { "SignStatus", signStatus, "Note", signNote });
