@@ -11,7 +11,7 @@ namespace DbAdm.Services
         {
             return new EditDto
             {
-                Table = "Table",
+                Table = "[Table]",
                 PkeyFid = "Id",
                 Col4 = null,
                 Items = new EitemDto[] {
@@ -27,7 +27,7 @@ namespace DbAdm.Services
                 {
                     new()
                     {
-                        Table = "Column",
+                        Table = "[Column]",
                         PkeyFid = "Id",
                         FkeyFid = "TableId",
                         OrderBy = "Sort",

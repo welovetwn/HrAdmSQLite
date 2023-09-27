@@ -17,7 +17,7 @@ namespace HrAdm.Services
             var locale = _Xp.GetLocale0();
             return new EditDto
             {
-				Table = "Leave",
+				        Table = "Leave",
                 PkeyFid = "Id",
                 ReadSql = $@"
 select l.*,
@@ -33,19 +33,23 @@ join User u3 on l.UserId=u3.Id
 where l.Id='{{0}}'
 ",
                 Items = new EitemDto[] 
-				{
-					new() { Fid = "Id" },
-					new() { Fid = "UserId", Required = true },
-					new() { Fid = "AgentId", Required = true },
-					new() { Fid = "LeaveType", Required = true },
-					new() { Fid = "StartTime", Required = true },
-					new() { Fid = "EndTime", Required = true },
-					new() { Fid = "Hours", Required = true },
-                    new() { Fid = "FileName" },
-                    new() { Fid = "FlowLevel", Value = "1" },
-                    new() { Fid = "FlowStatus", Value = "0" },
-					new() { Fid = "Status", Value = 1 },
+        				{
+        					new() { Fid = "Id" },
+        					new() { Fid = "UserId", Required = true },
+        					new() { Fid = "AgentId", Required = true },
+        					new() { Fid = "LeaveType", Required = true },
+        					new() { Fid = "StartTime", Required = true },
+        					new() { Fid = "EndTime", Required = true },
+        					new() { Fid = "Hours", Required = true },
+                            new() { Fid = "FileName" },
+                            new() { Fid = "FlowLevel", Value = "1" },
+                            new() { Fid = "FlowStatus", Value = "0" },
+        					new() { Fid = "Status", Value = 1 },
                 },
+                EmptyToNulls = new[] 
+                {
+                    "FileName"
+                },              
             };
         }
 

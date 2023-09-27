@@ -1,1 +1,1 @@
-export2sqlce "Server=10.2.102.52;DataBase=Hr;User ID=docker1;Password=dockeR123;" Hr_sqlite.sql sqlite 
+export2sqlce "Server=00.00.00.00;DataBase=Hr;User ID=userid;Password=userpass;" Hr_sqlite.sql sqlite 

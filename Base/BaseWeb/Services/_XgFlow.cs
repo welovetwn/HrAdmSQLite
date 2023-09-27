@@ -46,13 +46,13 @@ where u.Id='{0}'
             var error = string.Empty;
             var sql = string.Format(@"
 select 
-    FlowId=f.Id,
-    StartNodeId=l.StartNode,
-	StartNodeName=nf.Name,
-	StartNodeType=nf.NodeType,
-    EndNodeId=l.EndNode,
-    EndNodeName=nt.Name,
-	EndNodeType=nt.NodeType,
+    f.Id as FlowId,
+    l.StartNode as StartNodeId,
+	nf.Name as StartNodeName,
+	nf.NodeType as StartNodeType,
+    l.EndNode as EndNodeId,
+    nt.Name as EndNodeName,
+	nt.NodeType as EndNodeType,
 	nf.SignerType, nf.SignerValue,
     l.Sort, l.CondStr
 from XpFlowLine l

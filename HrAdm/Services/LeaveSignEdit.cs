@@ -14,8 +14,8 @@ namespace HrAdm.Services
             {
                 ReadSql = $@"
 select
-    SignId=s.Id,
-    LeaveId=l.Id,
+    s.Id as SignId,
+    l.Id as LeaveId,
     l.StartTime, l.EndTime, l.Hours, l.Created, l.FileName,
     c.Name_{locale} as LeaveName,
     u.Name as UserName,

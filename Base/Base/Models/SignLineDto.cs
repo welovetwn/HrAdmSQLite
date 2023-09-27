@@ -17,7 +17,7 @@ namespace Base.Models
         public string SignerType { get; set; }
         public string SignerValue { get; set; }
 
-        public int Sort { get; set; }
+        public long Sort { get; set; }
         public string CondStr { get; set; }
 
     }

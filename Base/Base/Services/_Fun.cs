@@ -171,8 +171,8 @@ namespace Base.Services
             switch (dbType)
             {
                 case DbTypeEnum.SQLite:
-                    DbDtFmt = "YYYY-MM-DD HH:mm:SS";
-                    DbDateFmt = "YYYY-MM-DD";
+                    DbDtFmt = "yyyy-MM-dd HH:mm:ss";
+                    DbDateFmt = "yyyy-MM-dd";
 
                     ReadPageSql = @"
 select {0} {1}
