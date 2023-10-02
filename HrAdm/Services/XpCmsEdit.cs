@@ -20,8 +20,8 @@ namespace HrAdm.Services
                 PkeyFid = "Id",
                 ReadSql = @"
 select c.*,
-    CreatorName=u.Name,
-    ReviserName=u2.Name
+    u.Name as CreatorName,
+    u2.Name as ReviserName
 from Cms c
 join User u on c.Creator=u.Id
 left join User u2 on c.Reviser=u2.Id
